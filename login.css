@@ -1,0 +1,9 @@
+.logo {
+  text-align: left;
+  margin-bottom: 20px;
+  animation: fadeSlideUp 0.8s ease forwards;
+}
+.logo img {
+  height: 50px;
+  margin-left: 5px;
+}

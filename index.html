@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personal Dashboard</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* --- RESET & BASIC --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+    body {
+      height: 100vh; width: 100vw;
+      background: linear-gradient(135deg, #0f2a63, #502e6e);
+      padding: 20px; color: white; overflow: hidden; 
+    }
+
+    /* --- LAYOUT --- */
+    .dashboard-container {
+      width: 100%; height: 100%; max-width: 1600px;
+      margin: 0 auto; display: flex; flex-direction: column; gap: 20px;
+    }
+
+    /* --- HEADER --- */
+    .dashboard-header {
+      height: 80px; flex-shrink: 0;
+      border-radius: 20px; background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 30px; animation: fadeIn 0.7s ease-out;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 20px; }
+    
+    .logo { height: 45px; width: auto; object-fit: contain; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+
+    .digital-clock {
+      font-size: 18px; font-weight: 600; letter-spacing: 1px;
+      background: rgba(0, 0, 0, 0.2); padding: 8px 15px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1); color: #c3bef0;
+    }
+
+    .btn-download {
+      text-decoration: none; color: white;
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 24px; border-radius: 30px;
+      font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+      transition: all 0.3s ease; cursor: pointer;
+    }
+    .btn-download:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+    /* --- CONTENT AREA --- */
+    .dashboard-content {
+      flex: 1; overflow-y: auto;
+      border-radius: 20px; background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 30px; animation: fadeIn 0.8s ease-out;
+      display: flex; flex-direction: column; gap: 25px;
+    }
+
+    /* --- GRIDS --- */
+    .profile-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
+    .tiles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+
+    @media (max-width: 900px) { .profile-grid { grid-template-columns: 1fr; } }
+
+    /* --- CARDS --- */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px; padding: 25px;
+      transition: transform 0.3s ease; display: flex; flex-direction: column;
+    }
+    .glass-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.12); }
+
+    .card-title {
+      font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+    }
+    .card-title i { color: #c3bef0; }
+
+    /* --- PROFILE & TYPEWRITER --- */
+    .profile-content { display: flex; align-items: center; gap: 30px; height: 100%; }
+    .profile-photo {
+      width: 150px; height: 150px; border-radius: 20px; object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .profile-quote-box { flex: 1; padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.1); min-height: 80px; display: flex; align-items: center;}
+    
+    .typewriter-text {
+      font-size: 24px; font-weight: 300; font-style: italic;
+      background: linear-gradient(90deg, #fff, #c3bef0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      border-right: 2px solid #c3bef0; /* Cursor */
+      animation: blink 0.75s step-end infinite;
+      white-space: pre-wrap;
+    }
+    @keyframes blink { 50% { border-color: transparent; } }
+
+    /* --- GITHUB GRAPH IMAGE --- */
+    .github-graph-img {
+      width: 100%; height: auto; border-radius: 10px;
+      /* Invert colors slightly to make it look good on dark theme */
+      filter: invert(1) hue-rotate(180deg) contrast(0.9);
+      opacity: 0.8;
+      background: rgba(255,255,255,0.05); /* Placeholder bg */
+    }
+
+    /* --- PROJECTS --- */
+    .project-desc { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 15px; line-height: 1.5; flex: 1; }
+    .project-links { display: flex; gap: 10px; margin-top: auto; }
+    .btn-small {
+      padding: 6px 12px; font-size: 12px; border-radius: 15px; text-decoration: none; color: white;
+      border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); transition: 0.2s;
+      cursor: pointer;
+    }
+    .btn-small:hover { background: white; color: #0f2a63; }
+
+    /* --- GRAPH & SKILLS (Standard) --- */
+    .graph-container { display: flex; align-items: center; gap: 20px; height: 100%; }
+    .chart-wrapper { flex: 1; height: 220px; position: relative; }
+    .sgpa-legend { width: 280px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.1); }
+    .legend-item { font-size: 13px; display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: rgba(255,255,255,0.05); border-radius: 8px; }
+    .legend-val { font-weight: 700; color: #c3bef0; }
+
+    .skill-row { margin-bottom: 15px; }
+    .skill-info { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px; }
+    .progress-bg { width: 100%; height: 8px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 10px; width: 0%; animation: loadBar 1.5s ease-out forwards; }
+    @keyframes loadBar { from { width: 0%; } }
+    .c-bg { background: linear-gradient(90deg, #555555, #A8B9CC); } .cpp-bg { background: linear-gradient(90deg, #00599C, #004482); }
+    .java-bg { background: linear-gradient(90deg, #f89820, #5382a1); } .py-bg { background: linear-gradient(90deg, #306998, #FFD43B); }
+    .ts-bg { background: linear-gradient(90deg, #007acc, #3178c6); } .html-bg { background: linear-gradient(90deg, #E34F26, #F06529); }
+    .css-bg { background: linear-gradient(90deg, #264de4, #2965f1); } .js-bg { background: linear-gradient(90deg, #F0DB4F, #d6c40b); }
+    
+    .list-item { margin-bottom: 20px; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.2); }
+    .item-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+    .item-title { font-size: 16px; font-weight: 600; }
+    .item-date { font-size: 12px; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 8px; }
+    .item-subtitle { font-size: 13px; color: rgba(255,255,255,0.7); font-style: italic; margin-bottom: 5px; }
+    .item-desc { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.4; }
+
+    /* Footer */
+    .dashboard-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: center; gap: 20px; }
+    .social-icon { width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 20px; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
+    .social-icon:hover { background: white; color: #0f2a63; transform: translateY(-3px); }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <div class="dashboard-header">
+      <img src="logo.png" alt="My Logo" class="logo">
+      
+      <div class="header-right">
+        <div id="clock" class="digital-clock">00:00:00</div>
+        
+        <a href="Resume.pdf" download="My_Resume.pdf" class="btn-download">
+          Download Resume <i class="fa-solid fa-download"></i>
+        </a>
+      </div>
+    </div>
+    
+    <div class="dashboard-content">
+      
+      <div class="profile-grid">
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-user-astronaut"></i> Profile & Philosophy</h3>
+          <div class="profile-content">
+            <img src="Photo.jpg" alt="My Profile" class="profile-photo">
+            <div class="profile-quote-box">
+              <span id="typewriter" class="typewriter-text"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-chart-line"></i> Academic Progress</h3>
+          <div class="graph-container">
+            <div class="chart-wrapper"><canvas id="sgpaChart"></canvas></div>
+            <div class="sgpa-legend">
+              <div class="legend-item"><span>Sem 1</span><span class="legend-val">9.25</span></div>
+              <div class="legend-item"><span>Sem 5</span><span class="legend-val" style="opacity:0.5">0</span></div>
+              <div class="legend-item"><span>Sem 2</span><span class="legend-val">9.12</span></div>
+              <div class="legend-item"><span>Sem 6</span><span class="legend-val" style="opacity:0.5">0</span></div>
+              <div class="legend-item"><span>Sem 3</span><span class="legend-val" style="font-size:10px; color:rgba(255,255,255,0.7)">0</span></div>
+              <div class="legend-item"><span>Sem 7</span><span class="legend-val" style="opacity:0.5">0</span></div>
+              <div class="legend-item"><span>Sem 4</span><span class="legend-val" style="opacity:0.5">0</span></div>
+              <div class="legend-item"><span>Sem 8</span><span class="legend-val" style="opacity:0.5">0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skills-grid">
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-code"></i> Technical Skills</h3>
+          <div class="skill-row"><div class="skill-info"><span>C</span><span>75%</span></div><div class="progress-bg"><div class="progress-fill c-bg" style="width: 75%"></div></div></div>
+          <div class="skill-row"><div class="skill-info"><span>C++</span><span>80%</span></div><div class="progress-bg"><div class="progress-fill cpp-bg" style="width: 80%"></div></div></div>
+          <div class="skill-row"><div class="skill-info"><span>Java</span><span>68%</span></div><div class="progress-bg"><div class="progress-fill java-bg" style="width: 68%"></div></div></div>
+          <div class="skill-row"><div class="skill-info"><span>Python</span><span>85%</span></div><div class="progress-bg"><div class="progress-fill py-bg" style="width: 85%"></div></div></div>
+          <div class="skill-row"><div class="skill-info"><span>TypeScript</span><span>60%</span></div><div class="progress-bg"><div class="progress-fill ts-bg" style="width: 60%"></div></div></div>
+          <div class="skill-row"><div class="skill-info"><span>HTML</span><span>95%</span></div><div class="progress-bg"><div class="progress-fill html-bg" style="width: 95%"></div></div></div>
+          <div class="skill-row"><div class="skill-info"><span>CSS</span><span>90%</span></div><div class="progress-bg"><div class="progress-fill css-bg" style="width: 90%"></div></div></div>
+          <div class="skill-row"><div class="skill-info"><span>JavaScript</span><span>88%</span></div><div class="progress-bg"><div class="progress-fill js-bg" style="width: 88%"></div></div></div>
+        </div> 
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+          <div class="list-item">
+            <div class="item-header"><span class="item-title">B.Tech Computer Science</span><span class="item-date">2024 - 2028</span></div>
+            <div class="item-subtitle">Indus University</div>
+            <div class="item-desc">• CGPA: 9.0/10[AVG]<br>• Specialized in AI & Web Tech</div>
+          </div>
+          <div class="list-item">
+            <div class="item-header"><span class="item-title">High School (Science)</span><span class="item-date">2020 - 2023</span></div>
+            <div class="item-subtitle">Edunova High School</div>
+            <div class="item-desc">• Physics, Chemistry, Math<br>• 72.3% in Final Boards</div>
+          </div>
+          <div class="list-item">
+            <div class="item-header"><span class="item-title">Primary School</span><span class="item-date">2010 - 2020</span></div>
+            <div class="item-subtitle">Nelson's Primary School</div>
+            <div class="item-desc">• English,S.S,Science,Maths...<br>• 70% in Schooling</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+         <h3 class="card-title"><i class="fa-brands fa-github"></i> GitHub Contributions</h3>
+         
+         <img src="Pugajjar.png" alt="Github Chart" class="github-graph-img">
+         
+         <p style="font-size: 12px; margin-top: 10px; color: rgba(255, 255, 255, 0.49); text-align: center;">*Graph updates automatically based on your GitHub activity</p>
+      </div>
+
+      <div class="tiles-grid">
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-briefcase"></i> Internships</h3>
+          <div class="list-item"><div class="item-header"><span class="item-title">Cloud Computing Intern (Remote)</span><span class="item-date">Summer '25</span></div><div class="item-subtitle">Plasmid Inc.</div><div class="item-desc">Developed Attendance Management System and Deployed using AWS.</div></div>
+          <div class="list-item"><div class="item-header"><span class="item-title">Artficial-Intelligance (Remote)</span><span class="item-date">Winter '24</span></div><div class="item-subtitle">My Job Groww</div><div class="item-desc">RAG ,NLP, Prompt-Engineering, Built an Model on Teachable machine.</div></div>
+        </div>
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-book-open"></i> Courses</h3>
+          <div class="list-item"><div class="item-header"><span class="item-title">AI for Begineers</span><span class="item-date">Nvidia</span></div><div class="item-subtitle">Completed: Jan 2025</div></div>
+          <div class="list-item"><div class="item-header"><span class="item-title">Artficial Intelligance</span><span class="item-date">HP</span></div><div class="item-subtitle">Completed: July 2025</div></div>
+          <div class="list-item"><div class="item-header"><span class="item-title">Python basics</span><span class="item-date">Scaler-Topics</span></div><div class="item-subtitle">Completed: August 2025</div></div>
+        </div>
+        <div class="glass-card">
+          <h3 class="card-title"><i class="fa-solid fa-certificate"></i> Certifications</h3>
+          <div class="list-item"><div class="item-header"><span class="item-title">AWS Cloud Practitioner</span><span class="item-date">2025</span></div><div class="item-subtitle">Amazon Web Services</div></div>
+          <div class="list-item"><div class="item-header"><span class="item-title">Google Skill Boost</span><span class="item-date">2024</span></div><div class="item-subtitle">Google</div></div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3 class="card-title"><i class="fa-solid fa-laptop-code"></i> Featured Projects</h3>
+        <div class="projects-grid">
+          
+          <div class="glass-card" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="item-header"><span class="item-title">AI Chat Application</span></div>
+            <p class="project-desc">A real-time chat interface built with React and OpenAI API, featuring glassmorphism UI and voice support.</p>
+            <div class="project-links">
+              <a href="https://github.com/Pugajjar/Local_Chatbot" target="_blank"  class="btn-small"><i class="fa-brands fa-github"></i> Code</a>
+              <a href="https://github.com/Pugajjar/Local_Chatbot/blob/main/chatbot.py" target="_blank"  class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
+            </div>
+          </div>
+
+          <div class="glass-card" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="item-header"><span class="item-title">XclusiveChat [Whatsapp Clone]</span></div>
+            <p class="project-desc">A Simple chatting application for web interface with the Firebase Backend </p>
+            <div class="project-links">
+              <a href="https://github.com/Pugajjar/XclusiveChat" target="_blank"  class="btn-small"><i class="fa-brands fa-github"></i> Code</a>
+              <a href="https://github.com/Pugajjar/XclusiveChat/blob/main/index.html" target="_blank" class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
+            </div>
+          </div>
+
+          <div class="glass-card" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="item-header"><span class="item-title">Personal Portfolio</span></div>
+            <p class="project-desc">This exact dashboard! A fully responsive, glassmorphism-themed portfolio website using pure HTML/CSS.</p>
+            <div class="project-links">
+              <a href="#" target="_blank" onclick="alert('Link not set yet! Replace # in code.')" class="btn-small"><i class="fa-brands fa-github"></i> Code</a>
+              <a href="#" target="_blank" onclick="alert('Link not set yet! Replace # in code.')" class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <footer class="dashboard-footer">
+        <a href="https://www.linkedin.com/in/pugajjar4706/" target="_blank" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://github.com/Pugajjar" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="#" target="_blank" class="social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="pugajjar4706@gmail.com" class="social-icon" title="Email"><i class="fa-solid fa-envelope"></i></a>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // START EVERYTHING WHEN PAGE LOADS
+    window.onload = function() {
+      startTime();
+      // Delay typewriter slightly so the fade-in animation completes first
+      setTimeout(typeWriter, 500); 
+    };
+
+    // 1. CLOCK FUNCTION
+    function startTime() {
+      const today = new Date();
+      let h = today.getHours();
+      let m = today.getMinutes();
+      let s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      document.getElementById('clock').innerHTML =  h + ":" + m + ":" + s;
+      setTimeout(startTime, 1000);
+    }
+
+    function checkTime(i) {
+      if (i < 10) {i = "0" + i};
+      return i;
+    }
+
+    // 2. TYPEWRITER FUNCTION
+    const textToType = '"Think Different, Think Innovative."';
+    const typeWriterElement = document.getElementById('typewriter');
+    let i = 0;
+
+    function typeWriter() {
+      if (i < textToType.length) {
+        typeWriterElement.innerHTML += textToType.charAt(i);
+        i++;
+        setTimeout(typeWriter, 100); 
+      } else {
+        // Stop blinking cursor after typing is done (optional)
+        typeWriterElement.style.borderRight = "2px solid transparent";
+        typeWriterElement.style.animation = "none";
+      }
+    }
+
+    // 3. GRAPH CONFIGURATION
+    const ctx = document.getElementById('sgpaChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(195, 190, 240, 0.6)');
+    gradient.addColorStop(1, 'rgba(195, 190, 240, 0.0)');
+
+    const semLabels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'];
+    const sgpaData = [9.25, 9.12,null,,null,null,null,null]; 
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: semLabels,
+        datasets: [{
+          label: 'SGPA',
+          data: sgpaData,
+          backgroundColor: gradient,
+          borderColor: '#c3bef0',
+          borderWidth: 2,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#c3bef0',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: function(context) { return ' SGPA: ' + context.parsed.y; } } }
+        },
+        scales: {
+          y: { beginAtZero: false, min: 5, max: 10, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'rgba(255, 255, 255, 0.7)' } },
+          x: { grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.7)', font: { size: 10 } } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Portal</title>
+
+  <!-- Google Font: Praise -->
+  <link href="https://fonts.googleapis.com/css2?family=Praise&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #0f2a63, #502e6e);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .top-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    .top-logo img {
+      height: 50px;
+    }
+
+    @keyframes fadeZoomIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-card {
+      width: 420px;
+      padding: 50px;
+      border-radius: 48px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: white;
+      animation: fadeZoomIn 0.7s ease-out;
+    }
+
+    .glass-card h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 400;
+      font-size: 40px;
+      font-family: "Praise", cursive;
+      animation: fadeSlideUp 0.5s ease forwards;
+    }
+
+    .glass-card input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 18px;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeSlideUp 0.5s ease forwards;
+    }
+
+    .glass-card input:nth-of-type(1) {
+      animation-delay: 0.3s;
+    }
+
+    .glass-card input:nth-of-type(2) {
+      animation-delay: 0.45s;
+    }
+
+    .glass-card input:focus {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .glass-card input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .glass-card button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.35);
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeSlideUp 0.5s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    .glass-card button:hover {
+      background: rgba(255, 255, 255, 0.5);
+      transform: scale(1.03);
+    }
+
+    .create-link {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 10px;
+      animation: fadeSlideUp 0.5s ease forwards;
+      animation-delay: 0.65s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .create-link a {
+      color: #ccc;
+      text-decoration: underline;
+    }
+
+    .privacy {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 25px;
+      color: rgba(255, 255, 255, 0.65);
+      animation: fadeSlideUp 0.5s ease forwards;
+      animation-delay: 0.75s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <div class="top-logo">
+    <img src="logo.png" alt="Logo" />
+  </div>
+
+  <!-- Login Card -->
+  <div class="glass-card">
+    <h2>Welcome</h2>
+    <form onsubmit="return validateLogin(event)">
+      <input type="text" id="username" placeholder="Username" required autocomplete="off" />
+      <input type="password" id="password" placeholder="Password" required autocomplete="off" />
+      <button type="submit">Login</button>
+
+      <p class="create-link">
+        Don’t have a username? <a href="#">Create</a>
+      </p>
+    </form>
+
+    <p class="privacy">
+      🔒 We respect your privacy. Your credentials are encrypted and safe.
+    </p>
+  </div>
+
+  <script>
+    function validateLogin(event) {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (username === "pugajjar4706@gmail.com" && password === "parthiv0539u") {
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Invalid username or password.");
+      }
+
+      return false;
+    }
+  </script>
+</body>
+</html>
