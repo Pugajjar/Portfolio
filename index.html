@@ -67,6 +67,13 @@
     /* --- GRIDS --- */
     .profile-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; }
     .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
+    /* Grid for GitHub + Links Card */
+    .grid-2-col { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+    /* Responsive adjustment for 2-col grid */
+    @media (max-width: 1024px) { .grid-2-col { grid-template-columns: 1fr; } }
+
+    /* New Grid for Languages, Frameworks, Platforms */
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
     .tiles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
 
@@ -108,11 +115,57 @@
     /* --- GITHUB GRAPH IMAGE --- */
     .github-graph-img {
       width: 100%; height: auto; border-radius: 10px;
-      /* Invert colors slightly to make it look good on dark theme */
-      filter: invert(1) hue-rotate(180deg) contrast(0.9);
-      opacity: 0.8;
+      /* REMOVED ENHANCED FILTER to allow the user's updated image to display naturally */
+      opacity: 0.85;
       background: rgba(255,255,255,0.05); /* Placeholder bg */
+      /* Ensure image height fits the reduced card size */
+      max-height: 250px; 
+      object-fit: cover;
+      transition: filter 0.5s ease;
     }
+    .github-graph-img:hover {
+        /* Removed filter reset on hover */
+    }
+
+    /* --- PROFILE LINK BUTTONS --- */
+    .profile-links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 15px;
+      flex-grow: 1; /* Allows the grid to fill the space in the card */
+      padding: 10px 0;
+    }
+
+    .profile-link-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 18px;
+      padding: 15px 10px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .profile-link-btn i {
+      font-size: 24px;
+      margin-bottom: 5px;
+      color: #c3bef0;
+    }
+    .profile-link-btn:hover {
+      background: #c3bef0;
+      color: #0f2a63;
+      transform: scale(1.05);
+    }
+    .profile-link-btn:hover i {
+      color: #0f2a63;
+    }
+
 
     /* --- PROJECTS --- */
     .project-desc { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 15px; line-height: 1.5; flex: 1; }
@@ -124,7 +177,7 @@
     }
     .btn-small:hover { background: white; color: #0f2a63; }
 
-    /* --- GRAPH & SKILLS (Standard) --- */
+    /* --- GRAPH & SKILLS (Standard) */
     .graph-container { display: flex; align-items: center; gap: 20px; height: 100%; }
     .chart-wrapper { flex: 1; height: 220px; position: relative; }
     .sgpa-legend { width: 280px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.1); }
@@ -148,10 +201,115 @@
     .item-subtitle { font-size: 13px; color: rgba(255,255,255,0.7); font-style: italic; margin-bottom: 5px; }
     .item-desc { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.4; }
 
+    /* New styles for Skill/Platform Tiles */
+    .skill-tile {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px; 
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: default;
+      height: 100px; /* fixed height for uniformity */
+      justify-content: center;
+    }
+    .skill-tile:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .skill-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #c3bef0;
+    }
+    .skill-label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
     /* Footer */
     .dashboard-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: center; gap: 20px; }
     .social-icon { width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 20px; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
     .social-icon:hover { background: white; color: #0f2a63; transform: translateY(-3px); }
+
+    /* --- EMAIL MODAL STYLES --- */
+    .email-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none; /* Controlled by JavaScript */
+      justify-content: center; align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .email-modal-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .email-card {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px; padding: 30px;
+      display: flex; flex-direction: column; align-items: center;
+      width: 90%; max-width: 400px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    
+    .email-modal-overlay.show .email-card {
+        transform: scale(1);
+    }
+
+    .email-card h4 {
+      font-size: 16px; margin-bottom: 15px; color: #c3bef0;
+      font-weight: 400;
+    }
+    
+    .email-display-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px 20px;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    
+    .btn-copy {
+      background: #c3bef0; 
+      color: #0f2a63;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-copy:hover {
+      background: #fff;
+      transform: scale(1.05);
+    }
+    
+    .copy-message {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #3DDC84; /* Success color */
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
 
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
@@ -161,10 +319,26 @@
 </head>
 <body>
 
+  <!-- Email Modal Overlay -->
+  <div id="emailModalOverlay" class="email-modal-overlay">
+    <div class="email-card">
+      <h4>My Professional Email</h4>
+      <div id="emailDisplay" class="email-display-box">pugajjar4706@gmail.com</div>
+      <button id="copyEmailButton" class="btn-copy">
+        <i class="fa-solid fa-copy"></i> Copy to Clipboard
+      </button>
+      <span id="copyMessage" class="copy-message">Copied!</span>
+    </div>
+  </div>
+
+
   <div class="dashboard-container">
     
     <div class="dashboard-header">
-      <img src="logo.png" alt="My Logo" class="logo">
+      <!-- Logo wrapper updated to scroll to top -->
+      <a href="#top" title="Go to Top" style="cursor: pointer;">
+        <img src="logo.png" alt="My Logo" class="logo">
+      </a>
       
       <div class="header-right">
         <div id="clock" class="digital-clock">00:00:00</div>
@@ -176,6 +350,9 @@
     </div>
     
     <div class="dashboard-content">
+      
+      <!-- Anchor point for the logo to jump to -->
+      <a id="top" style="position: absolute; top: 0;"></a>
       
       <div class="profile-grid">
         <div class="glass-card">
@@ -199,13 +376,15 @@
               <div class="legend-item"><span>Sem 6</span><span class="legend-val" style="opacity:0.5">0</span></div>
               <div class="legend-item"><span>Sem 3</span><span class="legend-val" style="font-size:10px; color:rgba(255,255,255,0.7)">0</span></div>
               <div class="legend-item"><span>Sem 7</span><span class="legend-val" style="opacity:0.5">0</span></div>
-              <div class="legend-item"><span>Sem 4</span><span class="legend-val" style="opacity:0.5">0</span></div>
               <div class="legend-item"><span>Sem 8</span><span class="legend-val" style="opacity:0.5">0</span></div>
             </div>
           </div>
         </div>
       </div>
 
+      
+      <!-- Existing Sections Below -->
+      
       <div class="skills-grid">
         <div class="glass-card">
           <h3 class="card-title"><i class="fa-solid fa-code"></i> Technical Skills</h3>
@@ -237,14 +416,51 @@
           </div>
         </div>
       </div>
+      
+      <!-- NEW GRID for GitHub Contributions (2/3 width) and Profile Links (1/3 width) -->
+      <div class="grid-2-col">
+        <!-- 1. GitHub Contributions Card (2/3) -->
+        <div class="glass-card">
+           <h3 class="card-title"><i class="fa-brands fa-github"></i> GitHub Contributions</h3>
+           
+           <img src="Pugajjar.png" alt="Github Chart" class="github-graph-img">
+           
+           <p style="font-size: 12px; margin-top: 10px; color: rgba(255, 255, 255, 0.49); text-align: center;">*Graph updates automatically based on your GitHub activity</p>
+        </div>
+        
+        <!-- 2. Profile Links Card (1/3) -->
+        <div class="glass-card">
+            <h3 class="card-title"><i class="fa-solid fa-user-check"></i> Competitive Profiles</h3>
+            <div class="profile-links-grid">
+                
+                <!-- LeetCode -->
+                <a href="#" target="_blank" class="profile-link-btn" title="Add LeetCode Link Here">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>LeetCode</span>
+                </a>
+                
+                <!-- CodeChef -->
+                <a href="#" target="_blank" class="profile-link-btn" title="Add CodeChef Link Here">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>CodeChef</span>
+                </a>
+                
+                <!-- GitHub -->
+                <a href="https://github.com/Pugajjar" target="_blank" class="profile-link-btn">
+                    <i class="fa-brands fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+                
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/pugajjar4706/" target="_blank" class="profile-link-btn">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                    <span>LinkedIn</span>
+                </a>
 
-      <div class="glass-card">
-         <h3 class="card-title"><i class="fa-brands fa-github"></i> GitHub Contributions</h3>
-         
-         <img src="Pugajjar.png" alt="Github Chart" class="github-graph-img">
-         
-         <p style="font-size: 12px; margin-top: 10px; color: rgba(255, 255, 255, 0.49); text-align: center;">*Graph updates automatically based on your GitHub activity</p>
+            </div>
+        </div>
       </div>
+      <!-- END NEW GRID -->
 
       <div class="tiles-grid">
         <div class="glass-card">
@@ -291,9 +507,106 @@
             <div class="item-header"><span class="item-title">Personal Portfolio</span></div>
             <p class="project-desc">This exact dashboard! A fully responsive, glassmorphism-themed portfolio website using pure HTML/CSS.</p>
             <div class="project-links">
-              <a href="#" target="_blank" onclick="alert('Link not set yet! Replace # in code.')" class="btn-small"><i class="fa-brands fa-github"></i> Code</a>
-              <a href="#" target="_blank" onclick="alert('Link not set yet! Replace # in code.')" class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
+              <!-- Note: removed onclick alert since it's forbidden in this environment -->
+              <a href="#" target="_blank" class="btn-small"><i class="fa-brands fa-github"></i> Code</a>
+              <a href="#" target="_blank" class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
             </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <!-- MOVED SECTION: Frameworks and Languages -->
+      <div class="glass-card">
+        <h3 class="card-title"><i class="fa-solid fa-layer-group"></i> Frameworks & Languages</h3>
+        <div class="tool-grid">
+          
+          <!-- Frameworks -->
+          <div class="skill-tile">
+            <i class="fa-brands fa-buffer skill-icon" style="color:#02569B;"></i> 
+            <span class="skill-label">Flutter</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-node-js skill-icon" style="color:#68A063;"></i> 
+            <span class="skill-label">Node.js</span>
+          </div>
+
+          <!-- Languages -->
+          <div class="skill-tile">
+            <i class="fa-solid fa-c skill-icon" style="color:#A8B9CC;"></i> 
+            <span class="skill-label">C</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-solid fa-handshake-angle skill-icon" style="color:#00599C;"></i> 
+            <span class="skill-label">C++</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-java skill-icon" style="color:#f89820;"></i> 
+            <span class="skill-label">Java</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-python skill-icon" style="color:#306998;"></i> 
+            <span class="skill-label">Python</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-solid fa-code skill-icon" style="color:#007acc;"></i> 
+            <span class="skill-label">Dart</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-html5 skill-icon" style="color:#E34F26;"></i> 
+            <span class="skill-label">HTML</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-css3-alt skill-icon" style="color:#264de4;"></i> 
+            <span class="skill-label">CSS</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-js skill-icon" style="color:#F0DB4F;"></i> 
+            <span class="skill-label">JavaScript</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- MOVED SECTION: Platforms -->
+      <div class="glass-card">
+        <h3 class="card-title"><i class="fa-solid fa-server"></i> Development Platforms & Tools</h3>
+        <div class="tool-grid">
+          
+          <!-- Cloud & Databases -->
+          <div class="skill-tile">
+            <i class="fa-brands fa-aws skill-icon" style="color:#FF9900;"></i> 
+            <span class="skill-label">AWS</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-google skill-icon" style="color:#4285F4;"></i> 
+            <span class="skill-label">Google Cloud</span>
+          </div>
+          <!-- Added Firebase Tile -->
+          <div class="skill-tile">
+            <i class="fa-solid fa-fire skill-icon" style="color:#FFCA28;"></i> 
+            <span class="skill-label">Firebase</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-solid fa-database skill-icon" style="color:#47A248;"></i> 
+            <span class="skill-label">MongoDB</span>
+          </div>
+
+          <!-- Tools & IDEs -->
+          <div class="skill-tile">
+            <i class="fa-brands fa-android skill-icon" style="color:#3DDC84;"></i> 
+            <span class="skill-label">Android Studio</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-solid fa-laptop-code skill-icon" style="color:#007ACC;"></i> 
+            <span class="skill-label">VS Code</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-brands fa-figma skill-icon" style="color:#F24E1E;"></i> 
+            <span class="skill-label">Figma</span>
+          </div>
+          <div class="skill-tile">
+            <i class="fa-solid fa-cubes skill-icon" style="color:#007ACC;"></i> 
+            <span class="skill-label">IntelliJ</span>
           </div>
 
         </div>
@@ -303,19 +616,77 @@
         <a href="https://www.linkedin.com/in/pugajjar4706/" target="_blank" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
         <a href="https://github.com/Pugajjar" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
         <a href="#" target="_blank" class="social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="pugajjar4706@gmail.com" class="social-icon" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <!-- Updated Email Icon to trigger modal -->
+        <a href="javascript:void(0)" onclick="openEmailModal()" class="social-icon" title="Email"><i class="fa-solid fa-envelope"></i></a>
       </footer>
 
     </div>
   </div>
 
   <script>
+    // Global constant for email
+    const USER_EMAIL = 'pugajjar4706@gmail.com';
+
     // START EVERYTHING WHEN PAGE LOADS
     window.onload = function() {
       startTime();
       // Delay typewriter slightly so the fade-in animation completes first
       setTimeout(typeWriter, 500); 
+      
+      // Set up modal listeners
+      const modalOverlay = document.getElementById('emailModalOverlay');
+      const copyButton = document.getElementById('copyEmailButton');
+      
+      // Close modal when clicking outside the card
+      modalOverlay.addEventListener('click', function(event) {
+        if (event.target.id === 'emailModalOverlay') {
+          closeEmailModal();
+        }
+      });
+
+      // Copy to clipboard functionality
+      copyButton.addEventListener('click', copyEmailToClipboard);
     };
+
+    // MODAL FUNCTIONS
+    function openEmailModal() {
+        document.getElementById('emailDisplay').innerText = USER_EMAIL;
+        document.getElementById('copyMessage').style.opacity = '0';
+        document.getElementById('emailModalOverlay').classList.add('show');
+    }
+
+    function closeEmailModal() {
+        document.getElementById('emailModalOverlay').classList.remove('show');
+    }
+
+    function copyEmailToClipboard() {
+        const email = USER_EMAIL;
+        const copyMessage = document.getElementById('copyMessage');
+        
+        // Use temporary textarea for copying text to clipboard in iframe environment
+        const tempInput = document.createElement('textarea');
+        tempInput.value = email;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        
+        try {
+            document.execCommand('copy');
+            copyMessage.innerText = 'Copied to clipboard!';
+            copyMessage.style.opacity = '1';
+        } catch (err) {
+            console.error('Could not copy text:', err);
+            copyMessage.innerText = 'Error copying email.';
+            copyMessage.style.opacity = '1';
+        }
+
+        document.body.removeChild(tempInput);
+        
+        // Hide message after a short delay and close modal
+        setTimeout(() => {
+            copyMessage.style.opacity = '0';
+            closeEmailModal();
+        }, 1500);
+    }
 
     // 1. CLOCK FUNCTION
     function startTime() {
