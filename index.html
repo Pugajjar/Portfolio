@@ -371,12 +371,13 @@
             <div class="chart-wrapper"><canvas id="sgpaChart"></canvas></div>
             <div class="sgpa-legend">
               <div class="legend-item"><span>Sem 1</span><span class="legend-val">9.25</span></div>
-              <div class="legend-item"><span>Sem 5</span><span class="legend-val" style="opacity:0.5">0</span></div>
+              <div class="legend-item"><span>Sem 5</span><span class="legend-val">0   </span></div>
               <div class="legend-item"><span>Sem 2</span><span class="legend-val">9.12</span></div>
-              <div class="legend-item"><span>Sem 6</span><span class="legend-val" style="opacity:0.5">0</span></div>
-              <div class="legend-item"><span>Sem 3</span><span class="legend-val" style="font-size:10px; color:rgba(255,255,255,0.7)">0</span></div>
-              <div class="legend-item"><span>Sem 7</span><span class="legend-val" style="opacity:0.5">0</span></div>
-              <div class="legend-item"><span>Sem 8</span><span class="legend-val" style="opacity:0.5">0</span></div>
+              <div class="legend-item"><span>Sem 6</span><span class="legend-val">0   </span></div>
+              <div class="legend-item"><span>Sem 3</span><span class="legend-val">9.64</span></div>
+              <div class="legend-item"><span>Sem 7</span><span class="legend-val">0   </span></div>
+              <div class="legend-item"><span>Sem 4</span><span class="legend-val">0   </span></div>
+              <div class="legend-item"><span>Sem 8</span><span class="legend-val">0   </span></div>
             </div>
           </div>
         </div>
@@ -486,8 +487,8 @@
         <div class="projects-grid">
           
           <div class="glass-card" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
-            <div class="item-header"><span class="item-title">AI Chat Application</span></div>
-            <p class="project-desc">A real-time chat interface built with React and OpenAI API, featuring glassmorphism UI and voice support.</p>
+            <div class="item-header"><span class="item-title">PG Intelligence (Mobile & Web)</span></div>
+            <p class="project-desc">A real-time chat interface built with Flutter and Local OpenSource LLMs, featuring local support.</p>
             <div class="project-links">
               <a href="https://github.com/Pugajjar/Local_Chatbot" target="_blank"  class="btn-small"><i class="fa-brands fa-github"></i> Code</a>
               <a href="https://github.com/Pugajjar/Local_Chatbot/blob/main/chatbot.py" target="_blank"  class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
@@ -495,8 +496,8 @@
           </div>
 
           <div class="glass-card" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
-            <div class="item-header"><span class="item-title">XclusiveChat [Whatsapp Clone]</span></div>
-            <p class="project-desc">A Simple chatting application for web interface with the Firebase Backend </p>
+            <div class="item-header"><span class="item-title">Dinoco Chat</span></div>
+            <p class="project-desc">A Simple chatting application for mobile with the Firebase Backend </p>
             <div class="project-links">
               <a href="https://github.com/Pugajjar/XclusiveChat" target="_blank"  class="btn-small"><i class="fa-brands fa-github"></i> Code</a>
               <a href="https://github.com/Pugajjar/XclusiveChat/blob/main/index.html" target="_blank" class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
@@ -512,6 +513,17 @@
               <a href="#" target="_blank" class="btn-small"><i class="fa-solid fa-eye"></i> Demo</a>
             </div>
           </div>
+
+
+
+          <div class="glass-card" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="item-header"><span class="item-title">Want to see all my Projects ?</span></div>
+            <p class="project-desc">Explore all my projects in the showcase page.</p>
+            <div class="project-links">
+              <a href="https://pugajjar.github.io/project_showcase/" target="_blank"  class="btn-small">Click Here</a>
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -729,7 +741,7 @@
     gradient.addColorStop(1, 'rgba(195, 190, 240, 0.0)');
 
     const semLabels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'];
-    const sgpaData = [9.25, 9.12,null,,null,null,null,null]; 
+    const sgpaData = [9.25, 9.12,9.64,,null,null,null,null,null]; 
 
     new Chart(ctx, {
       type: 'line',
